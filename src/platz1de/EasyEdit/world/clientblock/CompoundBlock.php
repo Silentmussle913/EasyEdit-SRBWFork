@@ -4,7 +4,6 @@ namespace platz1de\EasyEdit\world\clientblock;
 
 use pocketmine\block\BlockBreakInfo;
 use pocketmine\block\BlockIdentifier;
-use pocketmine\block\BlockTypeIds;
 use pocketmine\block\BlockTypeInfo;
 use pocketmine\block\Opaque;
 use pocketmine\data\runtime\InvalidSerializedRuntimeDataException;
@@ -16,6 +15,9 @@ use pocketmine\nbt\tag\CompoundTag;
  */
 class CompoundBlock extends Opaque
 {
+	/** @var int */
+	private static int $nextCustomId = 20000; // Start custom IDs high to avoid conflicts
+
 	/**
 	 * @param int         $typeLength
 	 * @param int         $type
@@ -23,7 +25,8 @@ class CompoundBlock extends Opaque
 	 */
 	public function __construct(private int $typeLength, private int $type, private CompoundTag $data)
 	{
-		parent::__construct(new BlockIdentifier($id = BlockTypeIds::newId()), "EasyEdit Helper $id", new BlockTypeInfo(BlockBreakInfo::instant()));
+		$id = self::$nextCustomId++;
+		parent::__construct(new BlockIdentifier($id), "EasyEdit Helper $id", new BlockTypeInfo(BlockBreakInfo::instant()));
 	}
 
 	public function getData(): CompoundTag
